@@ -1,1 +1,5 @@
 /target
+
+/src/inputs/day??.txt
+
+.DS_Store
