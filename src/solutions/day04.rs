@@ -11,22 +11,20 @@ impl Coord {
         Self { x, y }
     }
 
-    fn xmas(&self, inc: Self) -> Vec<Self> {
-        let mut out: Vec<Self> = Vec::new();
-        for i in 1.."XMAS".len() {
-            out.push(Self::new(
-                self.x + (inc.x * (i as isize)),
-                self.y + (inc.y * (i as isize)),
-            ))
-        }
-        out
+    fn xmas(&self, inc: Self) -> [Self; 3] {
+        std::array::from_fn(|i| {
+            Self::new(
+                self.x + (inc.x * ((i as isize) + 1)),
+                self.y + (inc.y * ((i as isize) + 1)),
+            )
+        })
     }
 
-    fn mas(&self, inc: Self) -> Vec<Self> {
-        let mut out: Vec<Self> = Vec::new();
-        out.push(Self::new(self.x + inc.x, self.y + inc.y)); //m
-        out.push(Self::new(self.x - inc.x, self.y - inc.y)); //s
-        out
+    fn mas(&self, inc: Self) -> [Self; 2] {
+        [
+            Self::new(self.x + inc.x, self.y + inc.y),
+            Self::new(self.x - inc.x, self.y - inc.y),
+        ]
     }
 }
 
@@ -94,10 +92,10 @@ fn part2(m_set: HashSet<Coord>, a_set: HashSet<Coord>, s_set: HashSet<Coord>) ->
     ];
 
     let mut count = 0;
-    for x in a_set {
+    for a in a_set {
         let mut mas_x_count = 0;
         for direction in &directions {
-            let mas = x.mas(*direction);
+            let mas = a.mas(*direction);
             if m_set.contains(&mas[0]) && s_set.contains(&mas[1]) {
                 mas_x_count += 1;
             }
